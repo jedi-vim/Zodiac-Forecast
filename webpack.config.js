@@ -6,9 +6,10 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
   mode: "development",
   devServer: {
-    static: {
-        directory: path.join(__dirname, 'dist')
-    },
+    static: [
+        {directory: path.join(__dirname, 'dist')},
+        {directory: path.join(__dirname, 'static')} 
+    ],
     compress: true,
     port: 9000
   },
@@ -29,7 +30,14 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: "babel-loader"
-      }
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        loader: 'file-loader',
+        options: {
+          publicPath: 'static',
+        },
+      },
     ], 
   },  
   plugins: [
