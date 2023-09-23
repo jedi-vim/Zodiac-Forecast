@@ -16,8 +16,7 @@ module.exports = {
   entry: [
         "./src/App.js", 
         "./src/index.js", 
-        // "./src/components/Cards.js",
-        "./src/components/CreateNote.jsx"
+        "./src/components/Cards.jsx",
     ],
   output: {
     filename: "main.js",

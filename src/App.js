@@ -20,6 +20,7 @@ const HeaderPanel = styled.div`
 const BodyPanel = styled.div`
     left: 35%;
     heigth: 30%;
+    perspective: 500px;
 `
 function App(){
     const [zodiacs, setZodiacs] = useState(

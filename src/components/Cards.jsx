@@ -1,53 +1,88 @@
-import React from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 
 const ContentPanel = styled.div`
     content: "";
-    display: inline-grid;
     padding: 5px;
     position: relative;
     width: 50%;
     height: 70%;
     left: 25%;
-    background-color: #f5f5f5;
 `
 
 const ContentPanelRow = styled.div`
     width: 100%;
-    display: block;
+    display: block flex;
+    margin: 10px;
+    justify-content: space-between;
 `
 
 const PostSheet = styled.div`
-   margin: 0.5%;
-   padding: 0.5%;
-   border: #4B0082 solid 1px;
-   background-color: #FFF0F5;
-   opacity: 1;
-   float: left;
+   margin: 2px;
+   padding: 2px;
    height: 100px;
    width: 31%;
-   transition: 0.6s ease-in-out;
-   display: flex;
+   border: 0.5px solid black;
+   box-shadow: 5px 5px black;
    justify-content: center;
+   transition: transform 1s;
+   transform-style: preserve-3d;
+   perspective: 1000px;
+   cursor: pointer;
 
-   &:hover {
-      scale: 1.10;
-      transform: rotateY(180deg)
-   }
+   ${(props)=> props.isFlipped && `transform: rotateY(180deg);`}
+`
+
+const PostSheetFace = styled.div`
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+`
+
+const PostSheetFront = styled(PostSheetFace)`
+   background-color: #F5F5F5;
+   transform: rotateY(0deg);
+`
+
+const PostSheetBack = styled(PostSheetFace)`
+   background-color: #FDF5E6;
+   align-text: center;
+   transform: rotateY(180deg);
 `
 
 const PostSheetTitle = styled.label`
     font-size: 0.9em;
-    margin: auto;
+    margin: 0 auto;
     text-align: center;
 `
 
 const PostSheetImage = styled.img`
-   margin: 0 auto;
-   display: block;
    width: 70px;
    height: 100px;
+   margin: 0 auto;
+   float: left;
+   -webkit-backface-visibility: hidden;
+   backface-visibility: hidden;
 `
+
+const FlipCard = ({signData})=>{
+
+    const [flipped, setFlipped] = React.useState(false)
+
+    return(
+        <PostSheet isFlipped={flipped} >
+            <PostSheetFront onClick={()=>setFlipped((flipped)=>!flipped)}>
+                <PostSheetImage src={`${signData.sign}.png`} />
+                <PostSheetTitle>{signData.sign}</PostSheetTitle>
+            </PostSheetFront>
+            <PostSheetBack onClick={()=>setFlipped((flipped)=>!flipped)}>
+               {signData.forecast || "Oremos, sem previsao"}
+            </PostSheetBack>
+       </PostSheet>
+    )
+}
 
 function Cards({ zodiacs, setZodiacs }){
     let arr = []
@@ -55,18 +90,9 @@ function Cards({ zodiacs, setZodiacs }){
         const [ z1, z2, z3 ] = [ zodiacs[idx], zodiacs[idx+1], zodiacs[idx+2] ]
         arr.push(
             <ContentPanelRow>
-                <PostSheet>
-                    <PostSheetImage src={`${z1.sign}.png`} />
-                    <PostSheetTitle>{z1.sign}</PostSheetTitle>
-               </PostSheet>
-                <PostSheet>
-                   <PostSheetImage src={`${z2.sign}.png`} />
-                   <PostSheetTitle>{z2.sign}</PostSheetTitle>
-               </PostSheet>
-               <PostSheet>
-                   <PostSheetImage src={`${z3.sign}.png`} />
-                   <PostSheetTitle>{z3.sign}</PostSheetTitle>
-               </PostSheet>
+                <FlipCard signData={z1} />
+                <FlipCard signData={z2} />
+                <FlipCard signData={z3} />
            </ContentPanelRow>
         )
     }
