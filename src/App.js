@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 
 import Cards from './components/Cards.jsx'
 
@@ -22,7 +23,9 @@ const BodyPanel = styled.div`
     heigth: 30%;
     perspective: 500px;
 `
+
 function App(){
+
     const [zodiacs, setZodiacs] = useState(
         [
             {"sign": "aries"},
@@ -38,6 +41,19 @@ function App(){
             {"sign": "virgem"},
             {"sign": "libra"}
         ])
+
+    useEffect(()=>{
+        axios.get("/forecast")
+        .then((res)=>{
+            if (res.status!=200) throw Error("Problema ao carregar dados")
+            const data = res.data
+            let newZData = zodiacs.map((elem)=>{
+                    return {sign: elem.sign, forecast: data[elem.sign]}
+                })
+            setZodiacs(newZData)
+        })
+
+    }, [])
     return (
         <div>
             <HeaderPanel>

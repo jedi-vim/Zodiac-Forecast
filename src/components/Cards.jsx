@@ -49,6 +49,7 @@ const PostSheetFront = styled(PostSheetFace)`
 const PostSheetBack = styled(PostSheetFace)`
    background-color: #FDF5E6;
    align-text: center;
+   overflow: scroll;
    transform: rotateY(180deg);
 `
 
